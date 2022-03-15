@@ -1,0 +1,9 @@
+[run]
+omit =
+    */tests/*
+    */test_*
+    */__init__.py
+    */mysql_connection.py
+    */configs.py
+    app.py
+    venv/*

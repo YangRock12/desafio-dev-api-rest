@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+  api:
+    build:
+      context: .
+    environment:
+      - DB_HOSTNAME=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=admin
+      - DB_DATABASE=dock_api
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - mysql-compose-network
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql-compose-network
+    volumes:
+      - D:\Documentos\repos\desafio-dev-api-rest\docs\database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+
+networks:
+  mysql-compose-network:
+    driver: bridge
